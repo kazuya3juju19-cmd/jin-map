@@ -1,0 +1,3335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#5b4ce1">
+<title>人員マップ</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --text:#182033;
+  --sub:#70798c;
+  --line:#e5e8f0;
+  --main:#5b4ce1;
+  --main2:#7667ed;
+  --soft:#eeecff;
+  --danger:#ef4444;
+  --green:#16a34a;
+  --yellow:#d97706;
+  --shadow:0 8px 25px rgba(31,41,75,.08);
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans JP",
+    sans-serif;
+}
+
+/* ===== ヘッダー ===== */
+
+header{
+  background:linear-gradient(135deg,#4938c7,#7567ed);
+  color:white;
+  padding:18px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  box-shadow:0 5px 20px rgba(48,38,130,.2);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.logo-icon{
+  width:52px;
+  height:52px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  background:rgba(255,255,255,.18);
+  font-size:28px;
+}
+
+.logo h1{
+  margin:0;
+  font-size:23px;
+}
+
+.logo p{
+  margin:4px 0 0;
+  font-size:12px;
+  opacity:.85;
+}
+
+.header-buttons{
+  display:flex;
+  gap:8px;
+}
+
+.header-btn{
+  border:1px solid rgba(255,255,255,.3);
+  color:white;
+  background:rgba(255,255,255,.12);
+  border-radius:10px;
+  padding:10px 13px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.header-btn:hover{
+  background:rgba(255,255,255,.22);
+}
+
+/* ===== メイン ===== */
+
+main{
+  max-width:1250px;
+  margin:auto;
+  padding:24px 18px 60px;
+}
+
+/* ===== 統計 ===== */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:14px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:17px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:var(--shadow);
+}
+
+.stat-icon{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:var(--soft);
+  font-size:21px;
+}
+
+.stat small{
+  color:var(--sub);
+  display:block;
+  font-size:11px;
+}
+
+.stat strong{
+  display:block;
+  font-size:25px;
+  margin-top:3px;
+}
+
+/* ===== タブ ===== */
+
+.tabs{
+  display:flex;
+  width:max-content;
+  max-width:100%;
+  gap:5px;
+  padding:5px;
+  margin-bottom:16px;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:13px;
+  box-shadow:var(--shadow);
+}
+
+.tab{
+  border:0;
+  background:transparent;
+  color:var(--sub);
+  padding:10px 17px;
+  border-radius:9px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.tab.active{
+  color:white;
+  background:var(--main);
+}
+
+/* ===== ツールバー ===== */
+
+.toolbar{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:15px;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr auto auto;
+  gap:9px;
+  box-shadow:var(--shadow);
+}
+
+.search{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:0 11px;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+
+.search input{
+  border:0;
+  outline:0;
+  width:100%;
+  padding:11px 0;
+}
+
+select,
+input{
+  font:inherit;
+  color:var(--text);
+  background:white;
+}
+
+select{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px;
+  outline:0;
+}
+
+button{
+  font:inherit;
+}
+
+.primary{
+  border:0;
+  background:var(--main);
+  color:white;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.primary:hover{
+  background:#4938c7;
+}
+
+.secondary{
+  border:1px solid var(--line);
+  background:#f8f9fd;
+  color:var(--text);
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.secondary:hover{
+  background:#eef0f7;
+}
+
+.favorite-filter{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:10px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.favorite-filter.active{
+  background:#fff4c7;
+  color:#9a6700;
+}
+
+/* ===== 結果 ===== */
+
+.result{
+  display:flex;
+  justify-content:space-between;
+  margin:13px 3px;
+  color:var(--sub);
+  font-size:13px;
+}
+
+.clear{
+  border:0;
+  background:none;
+  color:var(--main);
+  cursor:pointer;
+}
+
+/* ===== 人物カード ===== */
+
+.people{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.person{
+  position:relative;
+  background:white;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+
+.person-top{
+  display:flex;
+  gap:13px;
+  align-items:center;
+}
+
+.avatar{
+  width:56px;
+  height:56px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  background:linear-gradient(135deg,#6252df,#897cf3);
+  color:white;
+  font-size:25px;
+}
+
+.person-name{
+  font-size:17px;
+  font-weight:800;
+}
+
+.person-role{
+  color:var(--main);
+  font-size:12px;
+  font-weight:bold;
+  margin-top:3px;
+}
+
+.star{
+  position:absolute;
+  top:13px;
+  right:13px;
+  border:0;
+  background:none;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.info{
+  margin-top:15px;
+  display:grid;
+  gap:8px;
+}
+
+.info div{
+  color:var(--sub);
+  font-size:12px;
+}
+
+.info strong{
+  color:var(--text);
+}
+
+.status{
+  display:inline-block;
+  border-radius:20px;
+  padding:4px 8px;
+  font-size:10px;
+  font-weight:bold;
+}
+
+.online{
+  background:#dcfce7;
+  color:#15803d;
+}
+
+.busy{
+  background:#fef3c7;
+  color:#a16207;
+}
+
+.offline{
+  background:#f1f5f9;
+  color:#64748b;
+}
+
+.skills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:13px;
+}
+
+.skill{
+  background:#f1f3f8;
+  color:#566074;
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:10px;
+}
+
+.next{
+  margin-top:13px;
+  background:var(--soft);
+  color:#4938c7;
+  border-radius:10px;
+  padding:9px;
+  font-size:11px;
+}
+
+.card-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:14px;
+}
+
+.delete{
+  grid-column:1/-1;
+  border:1px solid #fecaca;
+  background:#fff5f5;
+  color:#dc2626;
+  border-radius:9px;
+  padding:8px;
+  cursor:pointer;
+}
+
+/* ===== 空状態 ===== */
+
+.empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:60px 20px;
+  background:white;
+  border:1px dashed #cbd5e1;
+  border-radius:17px;
+  color:var(--sub);
+}
+
+.empty-icon{
+  font-size:48px;
+}
+
+.empty h2{
+  color:var(--text);
+}
+
+/* ===== ページ ===== */
+
+.page-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+}
+
+.page-head h2{
+  margin:0;
+}
+
+.page-head p{
+  color:var(--sub);
+  font-size:12px;
+}
+
+/* ===== タイムライン ===== */
+
+.timeline{
+  display:grid;
+  gap:10px;
+}
+
+.time-row{
+  display:grid;
+  grid-template-columns:70px 1fr;
+  gap:15px;
+}
+
+.time{
+  text-align:right;
+  padding-top:12px;
+  color:var(--sub);
+  font-weight:bold;
+}
+
+.time-card{
+  background:white;
+  border-left:4px solid var(--main);
+  border-radius:12px;
+  padding:12px 15px;
+  box-shadow:var(--shadow);
+}
+
+.time-title{
+  font-weight:bold;
+}
+
+.time-sub{
+  color:var(--sub);
+  font-size:11px;
+  margin-top:4px;
+}
+
+/* ===== 場所 ===== */
+
+.locations{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.location-card{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:17px;
+  box-shadow:var(--shadow);
+}
+
+.location-title{
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.location-person{
+  border-top:1px solid var(--line);
+  padding:9px 0;
+  display:flex;
+  gap:9px;
+  align-items:center;
+}
+
+.small-avatar{
+  width:35px;
+  height:35px;
+  display:grid;
+  place-items:center;
+  background:var(--soft);
+  border-radius:10px;
+}
+
+/* ===== モーダル ===== */
+
+.modal-bg{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,.55);
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+
+.modal-bg.show{
+  display:flex;
+}
+
+.modal{
+  width:min(650px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);
+}
+
+.modal-head{
+  padding:20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+}
+
+.modal-head h2{
+  margin:0;
+}
+
+.close{
+  width:35px;
+  height:35px;
+  border:0;
+  border-radius:50%;
+  background:#f1f5f9;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.form{
+  padding:20px;
+}
+
+.section{
+  padding:0 0 20px;
+  margin-bottom:20px;
+  border-bottom:1px solid var(--line);
+}
+
+.section h3{
+  font-size:14px;
+  margin:0 0 13px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+label{
+  display:grid;
+  gap:6px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+label input,
+label select{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:11px;
+  outline:0;
+}
+
+label input:focus,
+label select:focus{
+  border-color:var(--main);
+}
+
+.hint{
+  color:var(--sub);
+  font-size:10px;
+  font-weight:normal;
+}
+
+.schedule-row{
+  display:grid;
+  grid-template-columns:95px 1fr 1fr 38px;
+  gap:7px;
+  margin-bottom:8px;
+}
+
+.schedule-row input{
+  min-width:0;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:9px;
+}
+
+.remove-schedule{
+  border:0;
+  background:#fee2e2;
+  color:#b91c1c;
+  border-radius:9px;
+  cursor:pointer;
+}
+
+.modal-foot{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+/* ===== 詳細 ===== */
+
+.detail{
+  padding:22px;
+}
+
+.detail-top{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.detail-avatar{
+  width:70px;
+  height:70px;
+  display:grid;
+  place-items:center;
+  border-radius:20px;
+  background:linear-gradient(135deg,#6252df,#897cf3);
+  color:white;
+  font-size:30px;
+}
+
+.detail-section{
+  margin-top:22px;
+}
+
+.detail-section h3{
+  font-size:13px;
+}
+
+.detail-schedule{
+  display:grid;
+  gap:7px;
+}
+
+.detail-schedule div{
+  background:#f8fafc;
+  padding:10px;
+  border-radius:9px;
+}
+
+/* ===== トースト ===== */
+
+#toast{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  background:#182033;
+  color:white;
+  padding:13px 17px;
+  border-radius:12px;
+  z-index:200;
+  opacity:0;
+  transform:translateY(100px);
+  transition:.25s;
+}
+
+#toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ===== ダーク ===== */
+
+body.dark{
+  --bg:#0f172a;
+  --card:#172033;
+  --text:#f8fafc;
+  --sub:#94a3b8;
+  --line:#334155;
+}
+
+body.dark .tabs,
+body.dark .toolbar,
+body.dark .person,
+body.dark .stat,
+body.dark .empty,
+body.dark .time-card,
+body.dark .location-card,
+body.dark .modal{
+  background:#172033;
+}
+
+body.dark input,
+body.dark select{
+  background:#172033;
+  color:white;
+}
+
+body.dark .secondary,
+body.dark .favorite-filter{
+  background:#202b40;
+  color:white;
+}
+
+body.dark .skill,
+body.dark .detail-schedule div{
+  background:#273449;
+}
+
+/* ===== レスポンシブ ===== */
+
+@media(max-width:1100px){
+
+  .stats{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .toolbar{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+
+  .search{
+    grid-column:1/-1;
+  }
+
+  .people,
+  .locations{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:700px){
+
+  header{
+    padding:13px;
+  }
+
+  .logo h1{
+    font-size:18px;
+  }
+
+  .logo p{
+    font-size:10px;
+  }
+
+  .header-btn.backup,
+  .header-btn.restore{
+    display:none;
+  }
+
+  main{
+    padding:15px 10px 40px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+  }
+
+  .stat{
+    padding:13px;
+  }
+
+  .stat strong{
+    font-size:21px;
+  }
+
+  .toolbar{
+    grid-template-columns:1fr;
+  }
+
+  .search{
+    grid-column:auto;
+  }
+
+  .people,
+  .locations{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .page-head{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .schedule-row{
+    grid-template-columns:90px 1fr 38px;
+  }
+
+  .schedule-location{
+    grid-column:2;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+
+    <div class="logo-icon">👥</div>
+
+    <div>
+      <h1>人員マップ</h1>
+      <p>誰が・何が得意で・いつ・どこにいるかを管理</p>
+    </div>
+
+  </div>
+
+  <div class="header-buttons">
+
+    <button
+      class="header-btn"
+      id="darkBtn"
+    >🌙</button>
+
+    <button
+      class="header-btn backup"
+      id="backupBtn"
+    >💾 バックアップ</button>
+
+    <button
+      class="header-btn restore"
+      id="restoreBtn"
+    >📥 復元</button>
+
+    <input
+      id="restoreFile"
+      type="file"
+      accept=".json"
+      hidden
+    >
+
+  </div>
+
+</header>
+
+
+<main>
+
+  <!-- 統計 -->
+
+  <section class="stats">
+
+    <div class="stat">
+      <div class="stat-icon">👤</div>
+      <div>
+        <small>登録人数</small>
+        <strong id="total">0</strong>
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">🟢</div>
+      <div>
+        <small>現在活動中</small>
+        <strong id="online">0</strong>
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">📍</div>
+      <div>
+        <small>場所</small>
+        <strong id="locationCount">0</strong>
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">⭐</div>
+      <div>
+        <small>お気に入り</small>
+        <strong id="favoriteCount">0</strong>
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">📅</div>
+      <div>
+        <small>予定</small>
+        <strong id="scheduleCount">0</strong>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- タブ -->
+
+  <nav class="tabs">
+
+    <button
+      class="tab active"
+      data-tab="people"
+    >👥 人物</button>
+
+    <button
+      class="tab"
+      data-tab="time"
+    >📅 時間</button>
+
+    <button
+      class="tab"
+      data-tab="locations"
+    >📍 場所</button>
+
+  </nav>
+
+
+  <!-- 人物 -->
+
+  <section id="peoplePage">
+
+    <div class="toolbar">
+
+      <div class="search">
+        🔎
+        <input
+          id="search"
+          type="search"
+          placeholder="名前・役割・場所・得意分野を検索..."
+        >
+      </div>
+
+      <select id="department">
+        <option value="">全部署</option>
+      </select>
+
+      <select id="statusFilter">
+        <option value="">全状態</option>
+        <option value="online">活動中</option>
+        <option value="busy">対応中</option>
+        <option value="offline">不在</option>
+      </select>
+
+      <select id="locationFilter">
+        <option value="">全場所</option>
+      </select>
+
+      <button
+        class="favorite-filter"
+        id="favoriteFilter"
+      >☆ お気に入り</button>
+
+      <button
+        class="primary"
+        id="addBtn"
+      >＋ 人物を追加</button>
+
+    </div>
+
+
+    <div class="result">
+
+      <span id="result">0人</span>
+
+      <button
+        class="clear"
+        id="clearBtn"
+      >条件をクリア</button>
+
+    </div>
+
+
+    <div
+      class="people"
+      id="people"
+    ></div>
+
+  </section>
+
+
+  <!-- 時間 -->
+
+  <section
+    id="timePage"
+    style="display:none"
+  >
+
+    <div class="page-head">
+
+      <div>
+        <h2>📅 今日の予定</h2>
+        <p>登録されている予定を時間順に表示します。</p>
+      </div>
+
+      <button
+        class="primary"
+        id="scheduleBtn"
+      >＋ 予定を追加</button>
+
+    </div>
+
+    <div
+      class="timeline"
+      id="timeline"
+    ></div>
+
+  </section>
+
+
+  <!-- 場所 -->
+
+  <section
+    id="locationsPage"
+    style="display:none"
+  >
+
+    <div class="page-head">
+
+      <div>
+        <h2>📍 場所別</h2>
+        <p>今どこに誰がいるのかを確認できます。</p>
+      </div>
+
+    </div>
+
+    <div
+      class="locations"
+      id="locations"
+    ></div>
+
+  </section>
+
+</main>
+
+
+<!-- =========================
+     人物追加・編集
+========================= -->
+
+<div
+  class="modal-bg"
+  id="personModal"
+>
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div>
+        <h2 id="modalTitle">人物を追加</h2>
+      </div>
+
+      <button
+        class="close"
+        data-close="personModal"
+      >×</button>
+
+    </div>
+
+
+    <form
+      class="form"
+      id="personForm"
+    >
+
+      <input
+        id="personId"
+        type="hidden"
+      >
+
+
+      <div class="section">
+
+        <h3>基本情報</h3>
+
+        <div class="form-grid">
+
+          <label>
+            名前
+            <input
+              id="name"
+              required
+              placeholder="名前"
+            >
+          </label>
+
+          <label>
+            役割
+            <input
+              id="role"
+              required
+              placeholder="例：営業担当"
+            >
+          </label>
+
+          <label>
+            部署
+            <input
+              id="departmentInput"
+              placeholder="例：営業部"
+            >
+          </label>
+
+          <label>
+            現在地
+            <input
+              id="locationInput"
+              placeholder="例：東京オフィス"
+            >
+          </label>
+
+          <label>
+            状態
+
+            <select id="statusInput">
+
+              <option value="online">
+                活動中
+              </option>
+
+              <option value="busy">
+                対応中
+              </option>
+
+              <option value="offline">
+                不在
+              </option>
+
+            </select>
+
+          </label>
+
+          <label>
+            アイコン
+            <input
+              id="avatar"
+              maxlength="2"
+              placeholder="👤"
+            >
+          </label>
+
+        </div>
+
+      </div>
+
+
+      <div class="section">
+
+        <h3>得意分野</h3>
+
+        <label>
+
+          得意分野
+
+          <input
+            id="skills"
+            placeholder="営業, プレゼン, Excel"
+          >
+
+          <span class="hint">
+            複数ある場合は「,」で区切ってください。
+          </span>
+
+        </label>
+
+      </div>
+
+
+      <div class="section">
+
+        <h3>予定</h3>
+
+        <div id="scheduleEditor"></div>
+
+        <button
+          type="button"
+          class="secondary"
+          id="addSchedule"
+        >＋ 予定を追加</button>
+
+      </div>
+
+
+      <div class="modal-foot">
+
+        <button
+          type="button"
+          class="secondary"
+          data-close="personModal"
+        >キャンセル</button>
+
+        <button
+          type="submit"
+          class="primary"
+        >保存する</button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     詳細
+========================= -->
+
+<div
+  class="modal-bg"
+  id="detailModal"
+>
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <h2>人物詳細</h2>
+
+      <button
+        class="close"
+        data-close="detailModal"
+      >×</button>
+
+    </div>
+
+    <div
+      class="detail"
+      id="detail"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<div id="toast"></div>
+
+
+<script>
+
+/* ==================================================
+   人員マップ
+   API不要
+   データはブラウザに保存
+================================================== */
+
+const KEY = "jinmap_v1";
+
+let people = [];
+
+let editingId = null;
+
+let favoriteOnly = false;
+
+
+/* ==============================
+   起動
+============================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    load();
+
+    events();
+
+    render();
+
+    if(
+      localStorage.getItem(
+        "jinmap_dark"
+      ) === "1"
+    ){
+
+      document.body.classList.add("dark");
+
+      document.getElementById(
+        "darkBtn"
+      ).textContent = "☀️";
+
+    }
+
+  }
+);
+
+
+/* ==============================
+   データ
+============================== */
+
+function load(){
+
+  try{
+
+    const data =
+      localStorage.getItem(KEY);
+
+    people =
+      data
+      ? JSON.parse(data)
+      : [];
+
+    if(!Array.isArray(people)){
+      people = [];
+    }
+
+  }catch(e){
+
+    people = [];
+
+  }
+
+}
+
+
+function save(){
+
+  localStorage.setItem(
+    KEY,
+    JSON.stringify(people)
+  );
+
+}
+
+
+/* ==============================
+   イベント
+============================== */
+
+function events(){
+
+  document
+    .getElementById("addBtn")
+    .onclick =
+      () => openPerson();
+
+
+  document
+    .getElementById("scheduleBtn")
+    .onclick =
+      () => {
+
+        if(!people.length){
+
+          toast(
+            "先に人物を登録してください"
+          );
+
+          return;
+
+        }
+
+        openPerson(
+          people[0].id
+        );
+
+        addSchedule();
+
+      };
+
+
+  document
+    .getElementById("addSchedule")
+    .onclick =
+      () => addSchedule();
+
+
+  document
+    .getElementById("personForm")
+    .onsubmit =
+      savePerson;
+
+
+  document
+    .getElementById("search")
+    .oninput =
+      renderPeople;
+
+
+  document
+    .getElementById("department")
+    .onchange =
+      renderPeople;
+
+
+  document
+    .getElementById("statusFilter")
+    .onchange =
+      renderPeople;
+
+
+  document
+    .getElementById("locationFilter")
+    .onchange =
+      renderPeople;
+
+
+  document
+    .getElementById("favoriteFilter")
+    .onclick =
+      () => {
+
+        favoriteOnly =
+          !favoriteOnly;
+
+        document
+          .getElementById(
+            "favoriteFilter"
+          )
+          .classList.toggle(
+            "active",
+            favoriteOnly
+          );
+
+        document
+          .getElementById(
+            "favoriteFilter"
+          )
+          .textContent =
+            favoriteOnly
+            ? "★ お気に入りのみ"
+            : "☆ お気に入り";
+
+        renderPeople();
+
+      };
+
+
+  document
+    .getElementById("clearBtn")
+    .onclick =
+      clearFilters;
+
+
+  document
+    .getElementById("darkBtn")
+    .onclick =
+      darkMode;
+
+
+  document
+    .getElementById("backupBtn")
+    .onclick =
+      backup;
+
+
+  document
+    .getElementById("restoreBtn")
+    .onclick =
+      () =>
+        document
+          .getElementById(
+            "restoreFile"
+          )
+          .click();
+
+
+  document
+    .getElementById("restoreFile")
+    .onchange =
+      restore;
+
+
+  document
+    .querySelectorAll(
+      "[data-close]"
+    )
+    .forEach(button => {
+
+      button.onclick =
+        () => closeModal(
+          button.dataset.close
+        );
+
+    });
+
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(tab => {
+
+      tab.onclick =
+        () => switchTab(
+          tab.dataset.tab
+        );
+
+    });
+
+}
+
+
+/* ==============================
+   タブ
+============================== */
+
+function switchTab(tab){
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(x =>
+      x.classList.remove("active")
+    );
+
+  document
+    .querySelector(
+      `[data-tab="${tab}"]`
+    )
+    .classList.add("active");
+
+
+  document
+    .getElementById("peoplePage")
+    .style.display =
+      tab === "people"
+      ? "block"
+      : "none";
+
+
+  document
+    .getElementById("timePage")
+    .style.display =
+      tab === "time"
+      ? "block"
+      : "none";
+
+
+  document
+    .getElementById("locationsPage")
+    .style.display =
+      tab === "locations"
+      ? "block"
+      : "none";
+
+
+  render();
+
+}
+
+
+/* ==============================
+   全描画
+============================== */
+
+function render(){
+
+  renderStats();
+
+  renderFilters();
+
+  renderPeople();
+
+  renderTimeline();
+
+  renderLocations();
+
+}
+
+
+/* ==============================
+   統計
+============================== */
+
+function renderStats(){
+
+  document.getElementById(
+    "total"
+  ).textContent =
+    people.length;
+
+
+  document.getElementById(
+    "online"
+  ).textContent =
+    people.filter(
+      p => p.status === "online"
+    ).length;
+
+
+  document.getElementById(
+    "favoriteCount"
+  ).textContent =
+    people.filter(
+      p => p.favorite
+    ).length;
+
+
+  document.getElementById(
+    "locationCount"
+  ).textContent =
+    new Set(
+      people
+        .map(p => p.location)
+        .filter(Boolean)
+    ).size;
+
+
+  document.getElementById(
+    "scheduleCount"
+  ).textContent =
+    people.reduce(
+      (sum,p) =>
+        sum +
+        (p.schedules
+          ? p.schedules.length
+          : 0),
+      0
+    );
+
+}
+
+
+/* ==============================
+   フィルター
+============================== */
+
+function renderFilters(){
+
+  const departments =
+    [...new Set(
+      people
+        .map(p => p.department)
+        .filter(Boolean)
+    )]
+    .sort();
+
+
+  const locations =
+    [...new Set(
+      people
+        .map(p => p.location)
+        .filter(Boolean)
+    )]
+    .sort();
+
+
+  const dep =
+    document.getElementById(
+      "department"
+    );
+
+
+  const loc =
+    document.getElementById(
+      "locationFilter"
+    );
+
+
+  const oldDep =
+    dep.value;
+
+
+  const oldLoc =
+    loc.value;
+
+
+  dep.innerHTML =
+    `<option value="">全部署</option>` +
+    departments
+      .map(
+        x =>
+          `<option value="${esc(x)}">${esc(x)}</option>`
+      )
+      .join("");
+
+
+  loc.innerHTML =
+    `<option value="">全場所</option>` +
+    locations
+      .map(
+        x =>
+          `<option value="${esc(x)}">${esc(x)}</option>`
+      )
+      .join("");
+
+
+  dep.value = oldDep;
+
+  loc.value = oldLoc;
+
+}
+
+
+/* ==============================
+   人物
+============================== */
+
+function filtered(){
+
+  const q =
+    document
+      .getElementById("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const dep =
+    document.getElementById(
+      "department"
+    ).value;
+
+
+  const status =
+    document.getElementById(
+      "statusFilter"
+    ).value;
+
+
+  const location =
+    document.getElementById(
+      "locationFilter"
+    ).value;
+
+
+  return people.filter(p => {
+
+    const text =
+      [
+        p.name,
+        p.role,
+        p.department,
+        p.location,
+        ...(p.skills || [])
+      ]
+      .join(" ")
+      .toLowerCase();
+
+
+    if(q && !text.includes(q))
+      return false;
+
+
+    if(
+      dep &&
+      p.department !== dep
+    )
+      return false;
+
+
+    if(
+      status &&
+      p.status !== status
+    )
+      return false;
+
+
+    if(
+      location &&
+      p.location !== location
+    )
+      return false;
+
+
+    if(
+      favoriteOnly &&
+      !p.favorite
+    )
+      return false;
+
+
+    return true;
+
+  });
+
+}
+
+
+function renderPeople(){
+
+  const list =
+    filtered();
+
+
+  document.getElementById(
+    "result"
+  ).textContent =
+    `${list.length}人 / ${people.length}人`;
+
+
+  const box =
+    document.getElementById(
+      "people"
+    );
+
+
+  if(!list.length){
+
+    box.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          👥
+        </div>
+
+        <h2>
+          ${
+            people.length
+            ? "条件に一致する人物がいません"
+            : "まだ人物が登録されていません"
+          }
+        </h2>
+
+        <p>
+          ${
+            people.length
+            ? "検索条件を変更してください。"
+            : "「＋ 人物を追加」から登録してください。"
+          }
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    list
+      .map(card)
+      .join("");
+
+
+  box
+    .querySelectorAll(
+      "[data-action]"
+    )
+    .forEach(button => {
+
+      const id =
+        button.dataset.id;
+
+
+      const action =
+        button.dataset.action;
+
+
+      button.onclick =
+        () => {
+
+          if(action === "favorite")
+            favorite(id);
+
+          if(action === "detail")
+            detail(id);
+
+          if(action === "edit")
+            openPerson(id);
+
+          if(action === "delete")
+            removePerson(id);
+
+        };
+
+    });
+
+}
+
+
+/* ==============================
+   カード
+============================== */
+
+function card(p){
+
+  const statusText = {
+
+    online:"活動中",
+    busy:"対応中",
+    offline:"不在"
+
+  }[p.status] || "不明";
+
+
+  const next =
+    nextSchedule(
+      p.schedules || []
+    );
+
+
+  return `
+
+    <article class="person">
+
+      <button
+        class="star"
+        data-action="favorite"
+        data-id="${p.id}"
+      >
+        ${p.favorite ? "★" : "☆"}
+      </button>
+
+
+      <div class="person-top">
+
+        <div class="avatar">
+          ${esc(p.avatar || "👤")}
+        </div>
+
+        <div>
+
+          <div class="person-name">
+            ${esc(p.name)}
+          </div>
+
+          <div class="person-role">
+            ${esc(p.role || "役割未設定")}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="info">
+
+        <div>
+          🏢
+          <strong>
+            ${esc(p.department || "部署未設定")}
+          </strong>
+        </div>
+
+        <div>
+          📍
+          <strong>
+            ${esc(p.location || "場所未設定")}
+          </strong>
+        </div>
+
+        <div>
+
+          <span class="status ${p.status}">
+            ● ${statusText}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="skills">
+
+        ${
+          p.skills && p.skills.length
+          ?
+
+          p.skills
+            .map(
+              x =>
+                `<span class="skill">${esc(x)}</span>`
+            )
+            .join("")
+
+          :
+
+          `<span class="skill">
+            得意分野未設定
+          </span>`
+        }
+
+      </div>
+
+
+      ${
+        next
+        ?
+
+        `<div class="next">
+          🕐 次の予定：
+          <strong>${esc(next.time)}</strong>
+          ${esc(next.title)}
+        </div>`
+
+        :
+
+        ""
+      }
+
+
+      <div class="card-buttons">
+
+        <button
+          class="secondary"
+          data-action="detail"
+          data-id="${p.id}"
+        >
+          詳細
+        </button>
+
+        <button
+          class="secondary"
+          data-action="edit"
+          data-id="${p.id}"
+        >
+          編集
+        </button>
+
+        <button
+          class="delete"
+          data-action="delete"
+          data-id="${p.id}"
+        >
+          🗑 削除
+        </button>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+
+/* ==============================
+   追加・編集
+============================== */
+
+function openPerson(id = null){
+
+  editingId = id;
+
+
+  document
+    .getElementById(
+      "personForm"
+    )
+    .reset();
+
+
+  document
+    .getElementById(
+      "scheduleEditor"
+    )
+    .innerHTML = "";
+
+
+  if(id){
+
+    const p =
+      people.find(
+        x => x.id === id
+      );
+
+
+    if(!p) return;
+
+
+    document.getElementById(
+      "modalTitle"
+    ).textContent =
+      "人物を編集";
+
+
+    document.getElementById(
+      "personId"
+    ).value =
+      p.id;
+
+
+    document.getElementById(
+      "name"
+    ).value =
+      p.name || "";
+
+
+    document.getElementById(
+      "role"
+    ).value =
+      p.role || "";
+
+
+    document.getElementById(
+      "departmentInput"
+    ).value =
+      p.department || "";
+
+
+    document.getElementById(
+      "locationInput"
+    ).value =
+      p.location || "";
+
+
+    document.getElementById(
+      "statusInput"
+    ).value =
+      p.status || "online";
+
+
+    document.getElementById(
+      "avatar"
+    ).value =
+      p.avatar || "👤";
+
+
+    document.getElementById(
+      "skills"
+    ).value =
+      (p.skills || [])
+        .join(", ");
+
+
+    (p.schedules || [])
+      .forEach(
+        s => addSchedule(s)
+      );
+
+  }else{
+
+    document.getElementById(
+      "modalTitle"
+    ).textContent =
+      "人物を追加";
+
+
+    document.getElementById(
+      "avatar"
+    ).value =
+      "👤";
+
+  }
+
+
+  document
+    .getElementById(
+      "personModal"
+    )
+    .classList.add("show");
+
+}
+
+
+/* ==============================
+   予定追加
+============================== */
+
+function addSchedule(data = {}){
+
+  const box =
+    document.getElementById(
+      "scheduleEditor"
+    );
+
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+
+  row.className =
+    "schedule-row";
+
+
+  row.innerHTML = `
+
+    <input
+      type="time"
+      class="schedule-time"
+      value="${escAttr(data.time || "")}"
+    >
+
+    <input
+      type="text"
+      class="schedule-title"
+      placeholder="予定"
+      value="${escAttr(data.title || "")}"
+    >
+
+    <input
+      type="text"
+      class="schedule-location"
+      placeholder="場所"
+      value="${escAttr(data.location || "")}"
+    >
+
+    <button
+      type="button"
+      class="remove-schedule"
+    >
+      ×
+    </button>
+
+  `;
+
+
+  row
+    .querySelector(
+      ".remove-schedule"
+    )
+    .onclick =
+      () => row.remove();
+
+
+  box.appendChild(row);
+
+}
+
+
+/* ==============================
+   保存
+============================== */
+
+function savePerson(e){
+
+  e.preventDefault();
+
+
+  const name =
+    document
+      .getElementById("name")
+      .value
+      .trim();
+
+
+  const role =
+    document
+      .getElementById("role")
+      .value
+      .trim();
+
+
+  if(!name || !role){
+
+    toast(
+      "名前と役割を入力してください"
+    );
+
+    return;
+
+  }
+
+
+  const schedules = [];
+
+
+  document
+    .querySelectorAll(
+      ".schedule-row"
+    )
+    .forEach(row => {
+
+      const time =
+        row
+          .querySelector(
+            ".schedule-time"
+          )
+          .value;
+
+
+      const title =
+        row
+          .querySelector(
+            ".schedule-title"
+          )
+          .value
+          .trim();
+
+
+      const location =
+        row
+          .querySelector(
+            ".schedule-location"
+          )
+          .value
+          .trim();
+
+
+      if(
+        time ||
+        title ||
+        location
+      ){
+
+        schedules.push({
+          time,
+          title,
+          location
+        });
+
+      }
+
+    });
+
+
+  schedules.sort(
+    (a,b) =>
+      (a.time || "99:99")
+      .localeCompare(
+        b.time || "99:99"
+      )
+  );
+
+
+  const data = {
+
+    name,
+
+    role,
+
+    department:
+      document
+        .getElementById(
+          "departmentInput"
+        )
+        .value
+        .trim(),
+
+    location:
+      document
+        .getElementById(
+          "locationInput"
+        )
+        .value
+        .trim(),
+
+    status:
+      document
+        .getElementById(
+          "statusInput"
+        )
+        .value,
+
+    avatar:
+      document
+        .getElementById(
+          "avatar"
+        )
+        .value
+        .trim() || "👤",
+
+    skills:
+      document
+        .getElementById(
+          "skills"
+        )
+        .value
+        .split(",")
+        .map(x => x.trim())
+        .filter(Boolean),
+
+    schedules
+
+  };
+
+
+  if(editingId){
+
+    const index =
+      people.findIndex(
+        p => p.id === editingId
+      );
+
+
+    if(index !== -1){
+
+      data.id =
+        editingId;
+
+      data.favorite =
+        people[index].favorite || false;
+
+      people[index] =
+        data;
+
+    }
+
+  }else{
+
+    people.push({
+
+      id:
+        makeId(),
+
+      favorite:false,
+
+      ...data
+
+    });
+
+  }
+
+
+  save();
+
+  closeModal(
+    "personModal"
+  );
+
+  render();
+
+  toast(
+    editingId
+    ? "人物情報を更新しました"
+    : "人物を追加しました"
+  );
+
+
+  editingId = null;
+
+}
+
+
+/* ==============================
+   お気に入り
+============================== */
+
+function favorite(id){
+
+  const p =
+    people.find(
+      x => x.id === id
+    );
+
+
+  if(!p) return;
+
+
+  p.favorite =
+    !p.favorite;
+
+
+  save();
+
+  render();
+
+}
+
+
+/* ==============================
+   削除
+============================== */
+
+function removePerson(id){
+
+  const p =
+    people.find(
+      x => x.id === id
+    );
+
+
+  if(!p) return;
+
+
+  if(
+    !confirm(
+      `「${p.name}」を削除しますか？`
+    )
+  )
+    return;
+
+
+  people =
+    people.filter(
+      x => x.id !== id
+    );
+
+
+  save();
+
+  render();
+
+  toast(
+    "人物を削除しました"
+  );
+
+}
+
+
+/* ==============================
+   詳細
+============================== */
+
+function detail(id){
+
+  const p =
+    people.find(
+      x => x.id === id
+    );
+
+
+  if(!p) return;
+
+
+  const statusText = {
+
+    online:"活動中",
+    busy:"対応中",
+    offline:"不在"
+
+  }[p.status] || "不明";
+
+
+  document
+    .getElementById("detail")
+    .innerHTML = `
+
+      <div class="detail-top">
+
+        <div class="detail-avatar">
+          ${esc(p.avatar || "👤")}
+        </div>
+
+        <div>
+
+          <h2>
+            ${esc(p.name)}
+          </h2>
+
+          <div class="person-role">
+            ${esc(p.role)}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-section">
+
+        <h3>📌 基本情報</h3>
+
+        <div class="info">
+
+          <div>
+            🏢 部署：
+            <strong>
+              ${esc(p.department || "未設定")}
+            </strong>
+          </div>
+
+          <div>
+            📍 現在地：
+            <strong>
+              ${esc(p.location || "未設定")}
+            </strong>
+          </div>
+
+          <div>
+            ● 状態：
+            <span class="status ${p.status}">
+              ${statusText}
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-section">
+
+        <h3>⭐ 得意分野</h3>
+
+        <div class="skills">
+
+          ${
+            p.skills && p.skills.length
+            ?
+
+            p.skills
+              .map(
+                x =>
+                  `<span class="skill">${esc(x)}</span>`
+              )
+              .join("")
+
+            :
+
+            "登録なし"
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-section">
+
+        <h3>📅 予定</h3>
+
+        <div class="detail-schedule">
+
+          ${
+            p.schedules &&
+            p.schedules.length
+
+            ?
+
+            p.schedules
+              .map(
+                x => `
+                  <div>
+                    <strong>
+                      ${esc(x.time || "--:--")}
+                    </strong>
+                   　
+                    ${esc(x.title || "予定")}
+                    ${
+                      x.location
+                      ? "　📍 " +
+                        esc(x.location)
+                      : ""
+                    }
+                  </div>
+                `
+              )
+              .join("")
+
+            :
+
+            "<div>予定なし</div>"
+          }
+
+        </div>
+
+      </div>
+
+    `;
+
+
+  document
+    .getElementById(
+      "detailModal"
+    )
+    .classList.add("show");
+
+}
+
+
+/* ==============================
+   タイムライン
+============================== */
+
+function renderTimeline(){
+
+  const all = [];
+
+
+  people.forEach(p => {
+
+    (p.schedules || [])
+      .forEach(s => {
+
+        all.push({
+
+          ...s,
+
+          person:p
+
+        });
+
+      });
+
+  });
+
+
+  all.sort(
+    (a,b) =>
+      (a.time || "99:99")
+      .localeCompare(
+        b.time || "99:99"
+      )
+  );
+
+
+  const box =
+    document.getElementById(
+      "timeline"
+    );
+
+
+  if(!all.length){
+
+    box.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          📅
+        </div>
+
+        <h2>予定がありません</h2>
+
+        <p>
+          人物に予定を登録すると表示されます。
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    all.map(
+      x => `
+
+        <div class="time-row">
+
+          <div class="time">
+            ${esc(x.time || "--:--")}
+          </div>
+
+          <div class="time-card">
+
+            <div class="time-title">
+
+              ${esc(
+                x.person.avatar || "👤"
+              )}
+
+              ${esc(x.person.name)}
+
+              — ${esc(
+                x.title || "予定"
+              )}
+
+            </div>
+
+            <div class="time-sub">
+
+              ${
+                x.location
+                ? "📍 " +
+                  esc(x.location)
+                : ""
+              }
+
+              ${
+                x.person.location
+                ? "　現在地："
+                  + esc(
+                    x.person.location
+                  )
+                : ""
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `
+    )
+    .join("");
+
+}
+
+
+/* ==============================
+   場所
+============================== */
+
+function renderLocations(){
+
+  const groups = {};
+
+
+  people.forEach(p => {
+
+    const loc =
+      p.location ||
+      "場所未設定";
+
+
+    if(!groups[loc])
+      groups[loc] = [];
+
+
+    groups[loc].push(p);
+
+  });
+
+
+  const box =
+    document.getElementById(
+      "locations"
+    );
+
+
+  const locations =
+    Object.keys(groups)
+      .sort();
+
+
+  if(!locations.length){
+
+    box.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          📍
+        </div>
+
+        <h2>場所情報がありません</h2>
+
+        <p>
+          人物を登録すると場所別に表示されます。
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    locations
+      .map(
+        loc => `
+
+          <div class="location-card">
+
+            <div class="location-title">
+              📍 ${esc(loc)}
+              <span style="
+                float:right;
+                color:var(--main);
+                font-size:12px;
+              ">
+                ${groups[loc].length}人
+              </span>
+            </div>
+
+            ${
+              groups[loc]
+                .map(
+                  p => `
+
+                    <div class="location-person">
+
+                      <div class="small-avatar">
+                        ${esc(
+                          p.avatar || "👤"
+                        )}
+                      </div>
+
+                      <div>
+
+                        <strong>
+                          ${esc(p.name)}
+                        </strong>
+
+                        <div style="
+                          color:var(--sub);
+                          font-size:11px;
+                        ">
+                          ${esc(
+                            p.role || ""
+                          )}
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  `
+                )
+                .join("")
+            }
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* ==============================
+   次の予定
+============================== */
+
+function nextSchedule(list){
+
+  if(!list.length)
+    return null;
+
+
+  const now =
+    new Date();
+
+
+  const current =
+    now.getHours() * 60 +
+    now.getMinutes();
+
+
+  return list
+    .filter(x => x.time)
+    .map(x => {
+
+      const [h,m] =
+        x.time
+          .split(":")
+          .map(Number);
+
+
+      return {
+
+        ...x,
+
+        minutes:
+          h * 60 + m
+
+      };
+
+    })
+    .filter(
+      x =>
+        x.minutes >= current
+    )
+    .sort(
+      (a,b) =>
+        a.minutes -
+        b.minutes
+    )[0] || null;
+
+}
+
+
+/* ==============================
+   条件クリア
+============================== */
+
+function clearFilters(){
+
+  document.getElementById(
+    "search"
+  ).value = "";
+
+
+  document.getElementById(
+    "department"
+  ).value = "";
+
+
+  document.getElementById(
+    "statusFilter"
+  ).value = "";
+
+
+  document.getElementById(
+    "locationFilter"
+  ).value = "";
+
+
+  favoriteOnly = false;
+
+
+  document.getElementById(
+    "favoriteFilter"
+  ).classList.remove(
+    "active"
+  );
+
+
+  document.getElementById(
+    "favoriteFilter"
+  ).textContent =
+    "☆ お気に入り";
+
+
+  renderPeople();
+
+}
+
+
+/* ==============================
+   ダーク
+============================== */
+
+function darkMode(){
+
+  const dark =
+    document.body
+      .classList
+      .toggle("dark");
+
+
+  localStorage.setItem(
+    "jinmap_dark",
+    dark ? "1" : "0"
+  );
+
+
+  document.getElementById(
+    "darkBtn"
+  ).textContent =
+    dark ? "☀️" : "🌙";
+
+}
+
+
+/* ==============================
+   バックアップ
+============================== */
+
+function backup(){
+
+  const data = {
+
+    version:1,
+
+    exportedAt:
+      new Date().toISOString(),
+
+    people
+
+  };
+
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          data,
+          null,
+          2
+        )
+      ],
+      {
+        type:
+          "application/json"
+      }
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const a =
+    document.createElement(
+      "a"
+    );
+
+
+  a.href = url;
+
+  a.download =
+    "人員マップ-バックアップ.json";
+
+
+  a.click();
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  toast(
+    "バックアップを保存しました"
+  );
+
+}
+
+
+/* ==============================
+   復元
+============================== */
+
+function restore(e){
+
+  const file =
+    e.target.files[0];
+
+
+  if(!file) return;
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    () => {
+
+      try{
+
+        const data =
+          JSON.parse(
+            reader.result
+          );
+
+
+        if(
+          !data ||
+          !Array.isArray(
+            data.people
+          )
+        ){
+
+          throw new Error();
+
+        }
+
+
+        if(
+          !confirm(
+            "現在のデータをバックアップで置き換えますか？"
+          )
+        )
+          return;
+
+
+        people =
+          data.people;
+
+
+        save();
+
+        render();
+
+        toast(
+          "データを復元しました"
+        );
+
+
+      }catch(error){
+
+        alert(
+          "正しいバックアップファイルではありません。"
+        );
+
+      }
+
+    };
+
+
+  reader.readAsText(file);
+
+  e.target.value = "";
+
+}
+
+
+/* ==============================
+   モーダル
+============================== */
+
+function closeModal(id){
+
+  document
+    .getElementById(id)
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+/* ==============================
+   Toast
+============================== */
+
+let toastTimer;
+
+
+function toast(message){
+
+  const box =
+    document.getElementById(
+      "toast"
+    );
+
+
+  box.textContent =
+    message;
+
+
+  box.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      () =>
+        box.classList.remove(
+          "show"
+        ),
+      2200
+    );
+
+}
+
+
+/* ==============================
+   ID
+============================== */
+
+function makeId(){
+
+  if(
+    window.crypto &&
+    crypto.randomUUID
+  ){
+
+    return crypto.randomUUID();
+
+  }
+
+
+  return (
+    Date.now() +
+    "_" +
+    Math.random()
+      .toString(36)
+      .slice(2)
+  );
+
+}
+
+
+/* ==============================
+   HTMLエスケープ
+============================== */
+
+function esc(value){
+
+  return String(
+    value ?? ""
+  )
+  .replaceAll(
+    "&",
+    "&amp;"
+  )
+  .replaceAll(
+    "<",
+    "&lt;"
+  )
+  .replaceAll(
+    ">",
+    "&gt;"
+  )
+  .replaceAll(
+    '"',
+    "&quot;"
+  )
+  .replaceAll(
+    "'",
+    "&#039;"
+  );
+
+}
+
+
+function escAttr(value){
+
+  return esc(value);
+
+}
+
+</script>
+
+</body>
+</html>
